@@ -1,46 +1,48 @@
-var gulp = require('gulp');
-var $ = require('gulp-load-plugins')({lazy: true});
-var args = require('yargs').argv;
-var cp = require('child_process');
-var del = require('del');
-var rollup = require('rollup-stream');
-var source = require('vinyl-source-stream');
+'use strict';
+let gulp = require('gulp');
+let $ = require('gulp-load-plugins')({lazy: true});
+let args = require('yargs').argv;
+let cp = require('child_process');
+let del = require('del');
+let rollup = require('rollup-stream');
+let source = require('vinyl-source-stream');
 
-var path = require("path");
+let path = require("path");
 
-var ngcOutput = './src/';
-var jsCopySrc = ['*.js', '*.js.map', '*.d.ts', '*.metadata.json'].map(ext => ngcOutput + ext);
+let ngcOutput = './src/';
+let jsCopySrc = ['*.js', '*.js.map', '*.d.ts', '*.metadata.json'].map(ext => ngcOutput + ext);
+let distDir = './dist/';
 
 gulp.task('default', ['help']);
 
 gulp.task('help', $.taskListing.withFilters(function (taskName) {
-  var isSubTask = taskName.substr(0, 1) == "_";
-  return isSubTask;
+    return taskName.substr(0, 1) == "_";
 }, function (taskName) {
-  var shouldRemove = taskName === 'default';
-  return shouldRemove;
+    return taskName === 'default';
 }));
 
-gulp.task('build', ['umd'], function(){
-  return gulp
-    .src(jsCopySrc)
-    .pipe(gulp.dest('./'));
-});
-
-gulp.task('ngc', ['clean'], function(done) {
-    runNgc('./', done);
+gulp.task('build', ['umd'], function () {
+    return gulp
+        .src(jsCopySrc)
+        .pipe(gulp.dest(distDir));
 });
 
 // Uses rollup-stream plugin https://www.npmjs.com/package/rollup-stream
-gulp.task('umd', ['ngc'], function(done) {
+gulp.task('umd', ['ngc'], function (done) {
     return rollup('rollup.config.js')
-    .pipe(source('in-memory-web-api.umd.js'))
-    .pipe(gulp.dest('./bundles'));
+        .pipe(source('in-memory-web-api.umd.js'))
+        .pipe(gulp.dest('./bundles'));
 });
 
-gulp.task('clean', function(done) {
-  clean(['aot/**/*.*']);
-  clean([ngcOutput+'*.js', '*.js.map', '*.d.ts', '!gulpfile.js', '*.metadata.json', './bundles/in-memory-web-api.umd.js'], done);
+gulp.task('ngc', ['clean'], function (done) {
+    runNgc('./', done);
+});
+
+gulp.task('clean', function (done) {
+    clean(['aot/**/*.*']);
+    clean(['dist/**/*.*']);
+    clean(['!gulpfile.js', './bundles/in-memory-web-api.umd.js']);
+    clean(['*.js', '*.js.map', '*.d.ts', '*.metadata.json'].map(ext => ngcOutput + ext), done);
 });
 
 /**
@@ -51,11 +53,11 @@ gulp.task('clean', function(done) {
  * --type=major will bump the major version x.*.*
  * --version=1.2.3 will bump to a specific version and ignore other flags
  */
-gulp.task('bump', function() {
-    var msg = 'Bumping versions';
-    var type = args.type;
-    var version = args.ver;
-    var options = {};
+gulp.task('bump', function () {
+    let msg = 'Bumping versions';
+    let type = args.type;
+    let version = args.ver;
+    let options = {};
     if (version) {
         options.version = version;
         msg += ' to ' + version;
@@ -67,7 +69,7 @@ gulp.task('bump', function() {
 
     return gulp
         .src('package.json')
-//        .pipe($.print())
+        //        .pipe($.print())
         .pipe($.bump(options))
         .pipe(gulp.dest('./'));
 });
@@ -75,16 +77,16 @@ gulp.task('bump', function() {
 
 function clean(path, done) {
     log('Cleaning: ' + $.util.colors.blue(path));
-    del(path, {dryRun:false})
-    .then(function(paths) {
-      console.log('Deleted files and folders:\n', paths.join('\n'));
-    })
-    .then(done,done);
+    del(path, {dryRun: false})
+        .then(function (paths) {
+            console.log('Deleted files and folders:\n', paths.join('\n'));
+        })
+        .then(done, done);
 }
 
 function log(msg) {
     if (typeof(msg) === 'object') {
-        for (var item in msg) {
+        for (let item in msg) {
             if (msg.hasOwnProperty(item)) {
                 $.util.log($.util.colors.blue(msg[item]));
             }
@@ -95,10 +97,10 @@ function log(msg) {
 }
 function runNgc(directory, done) {
     directory = directory || './';
-    //var ngcjs = path.join(process.cwd(), 'node_modules/typescript/bin/tsc');
+    //let ngcjs = path.join(process.cwd(), 'node_modules/typescript/bin/tsc');
     //ngcjs = path.join(process.cwd(), 'node_modules/.bin/ngc');
-    var ngcjs = './node_modules/@angular/compiler-cli/src/main.js';
-    var childProcess = cp.spawn('node', [ngcjs, '-p', directory], { cwd: process.cwd() });
+    let ngcjs = './node_modules/@angular/compiler-cli/src/main.js';
+    let childProcess = cp.spawn('node', [ngcjs, '-p', 'tsconfig.aot.json'], {cwd: process.cwd()});
     childProcess.stdout.on('data', function (data) {
         console.log(data.toString());
     });
