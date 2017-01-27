@@ -14,7 +14,12 @@
         "start": "concurrently \"npm run tsc:w\" \"npm run lite\" ",
         "test": "karma start karma.conf.js",
         "build-and-test": "concurrently  \"npm run tsc\" \"npm run test\"",
-        "http-server": "tsc && http-server"
+        "http-server": "tsc && http-server",
+        "build": "gulp build",
+        "clean": "npm-run-all clean:**",
+        "clean:gulp": "gulp clean",
+        "clean:extra": "rimraf aot dist",
+        "deep-clean": "rm -rf node_modules"
     },
     "repository": {
         "type": "git",
@@ -65,6 +70,7 @@
         "karma-intl-shim": "1.0.3",
         "lite-server": "2.2.2",
         "lodash": "4.17.4",
+        "npm-run-all": "4.0.1",
         "rimraf": "2.5.4",
         "rollup": "0.36.0",
         "rollup-stream": "1.14.0",
