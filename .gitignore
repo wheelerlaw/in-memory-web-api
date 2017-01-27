@@ -12,3 +12,4 @@ examples/*.js.map
 examples/*.metadata.json
 yarn.lock
 .idea/
+dist/
