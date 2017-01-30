@@ -20,7 +20,7 @@
         "typings/main.d.ts"
     ],
     "angularCompilerOptions": {
-        "genDir": "dist",
+        "genDir": "aot",
         "skipMetadataEmit": false
     },
     "files": [

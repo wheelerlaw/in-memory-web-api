@@ -1,9 +1,10 @@
 {
-    "name": "angular-in-memory-web-api",
+    "name": "@wheelerlaw/angular-in-memory-web-api",
     "version": "0.2.4",
     "description": "An in-memory web api for Angular demos and tests",
     "main": "bundles/in-memory-web-api.umd.js",
-    "module": "./dist/index.js",
+    "module": "./dist/src/index.js",
+    "typings": "./dist/src/index.d.ts",
     "scripts": {
         "tsc": "tsc",
         "ngc": "ngc",
@@ -60,6 +61,7 @@
         "gulp-task-listing": "1.0.1",
         "gulp-util": "3.0.7",
         "http-server": "0.9.0",
+        "hammerjs": "2.0.8",
         "jasmine-core": "~2.5.2",
         "karma": "1.4.0",
         "karma-chrome-launcher": "2.0.0",

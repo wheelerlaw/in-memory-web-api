@@ -5,3 +5,6 @@ typings
 yarn.lock
 .idea/
 dist/
+examples/*.d.ts
+examples/*.metadata.json
+examples/*.js*
