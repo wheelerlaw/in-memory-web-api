@@ -40,7 +40,7 @@ gulp.task('ngc', ['clean'], function (done) {
 
 gulp.task('clean', function (done) {
     clean(['aot/**/*.*']);
-    clean(['dist/*.*']);
+    clean(['dist/**/*.*']);
     clean(['!gulpfile.js', './bundles/in-memory-web-api.umd.js']);
     clean(['*.js', '*.js.map', '*.d.ts', '*.metadata.json'].map(ext => ngcOutput + ext), done);
 });
@@ -100,7 +100,7 @@ function runNgc(directory, done) {
     //let ngcjs = path.join(process.cwd(), 'node_modules/typescript/bin/tsc');
     //ngcjs = path.join(process.cwd(), 'node_modules/.bin/ngc');
     let ngcjs = './node_modules/@angular/compiler-cli/src/main.js';
-    let childProcess = cp.spawn('node', [ngcjs, '-p', directory], {cwd: process.cwd()});
+    let childProcess = cp.spawn('node', [ngcjs, '-p', 'tsconfig.aot.json'], {cwd: process.cwd()});
     childProcess.stdout.on('data', function (data) {
         console.log(data.toString());
     });
