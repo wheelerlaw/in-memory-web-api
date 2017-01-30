@@ -11,3 +11,4 @@ tslint.json
 rollup.config.js
 .travis.yml
 yarn.lock
+.idea
