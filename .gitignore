@@ -7,4 +7,5 @@ yarn.lock
 dist/
 examples/*.d.ts
 examples/*.metadata.json
-examples/*.js*
+examples/*.js
+examples/*.js.map
